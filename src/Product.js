@@ -1,5 +1,6 @@
 import React from 'react'
 import './Product.css'
+import { useStateValue } from "./StateProvider";
 
 /*Product info consists of 3 things:
 1. Name
@@ -7,7 +8,23 @@ import './Product.css'
 3. Reviews*/
 
 //inside product thr argument are called props
-function Product({title,image,price,rating}) {
+function Product({id,title,image,price,rating}) {
+  const [{ basket }, dispatch] = useStateValue();
+  
+  const addToBasket = () => {
+    // dispatch the item into the data layer
+    dispatch({
+      type: "ADD_TO_BASKET",
+      item: {
+        id: id,
+        title: title,
+        image: image,
+        price: price,
+        rating: rating,
+      },
+    });
+  };
+
   return (
     <div className="product">
     <div className="product__info">
@@ -29,7 +46,7 @@ function Product({title,image,price,rating}) {
       <img src={image}
       alt="lean"
       />
-      <button>Add to Basket</button>
+      <button onClick={addToBasket}>Add to Basket</button>
     </div>
   )
 }
