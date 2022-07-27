@@ -1,22 +1,38 @@
 import React, { useState } from 'react';
 import './Login.css'
-import { Link, useHistory } from "react-router-dom";
-import { auth } from "./firebase";
+import { Link, useNavigate } from "react-router-dom"
+import { auth } from './firebase'
 
 function Login() {
-    
+    const history = useNavigate();
     const [email, setEmail] = useState('');
     const [password, setPassword] = useState('');
 
     const signIn=e=>{
         e.preventDefault();
         //Do some firebase stuff
+        auth
+        .signInWithEmailAndPassword(email, password)
+        .then(auth => {
+            history('/')
+        })
+        .catch(error => alert(error.message))
+
     }
     
     const register=e=>{
         e.preventDefault();
 
         //do some firebase stuff
+        auth
+        .createUserWithEmailAndPassword(email, password)
+        .then((auth) => {
+            // it successfully created a new user with email and password
+            if (auth) {
+                history('/');
+            }
+        })
+        .catch(error => alert(error.message))
     }
 
     return (
@@ -25,7 +41,7 @@ function Login() {
                 <img
                     className="login__logo"
                     src='https://upload.wikimedia.org/wikipedia/commons/thumb/a/a9/Amazon_logo.svg/1024px-Amazon_logo.svg.png' 
-                />
+                alt='amazon'/>
             </Link>
 
             <div className='login__container'>
